@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "1qgVey336nwi0esGOWFEmyyOK0m4uDxFUOEEdNAlv5k=",
+  "Source": "DistributedMazeGame.Server",
+  "BasePath": "_content/DistributedMazeGame.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
