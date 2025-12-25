@@ -1,12 +1,1042 @@
 {
   "Version": 1,
-  "Hash": "1qgVey336nwi0esGOWFEmyyOK0m4uDxFUOEEdNAlv5k=",
+  "Hash": "/IBQQzcB6yVJx5NLJbmuNB1FJfuAwFKreaoZpMVrY/c=",
   "Source": "DistributedMazeGame.Server",
   "BasePath": "_content/DistributedMazeGame.Server",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "DistributedMazeGame.Server\\wwwroot",
+      "Source": "DistributedMazeGame.Server",
+      "ContentRoot": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\",
+      "BasePath": "_content/DistributedMazeGame.Server",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\1znliu1l8d-1sd94obsay.gz",
+      "SourceId": "DistributedMazeGame.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/DistributedMazeGame.Server",
+      "RelativePath": "assets/index-C3lPSvVT#[.{fingerprint=1sd94obsay}]?.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-C3lPSvVT.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "l765n1hvhq",
+      "Integrity": "sZkOoTHkAV9GYmv+stKyewQcMAJdgWoUDaKyTdx+lbI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-C3lPSvVT.js"
+    },
+    {
+      "Identity": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\f7s2s6q8ya-dv4viiqicx.gz",
+      "SourceId": "DistributedMazeGame.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/DistributedMazeGame.Server",
+      "RelativePath": "assets/index-DOtGIqZi#[.{fingerprint=dv4viiqicx}]?.css.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-DOtGIqZi.css",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "kbvtoba7qv",
+      "Integrity": "MDgu2jVgxVzMR6L+W7O5sSzJDv4D23auf8Z446QbF6I=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-DOtGIqZi.css"
+    },
+    {
+      "Identity": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\lyvmysih1l-pxkjgjec19.gz",
+      "SourceId": "DistributedMazeGame.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/DistributedMazeGame.Server",
+      "RelativePath": "index#[.{fingerprint=pxkjgjec19}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\index.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "esdxsweblb",
+      "Integrity": "DoAqjPayRhgzv2nTAtRj5xhnf5Iv24rhL19JH7RpcpM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-C3lPSvVT.js",
+      "SourceId": "DistributedMazeGame.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\",
+      "BasePath": "_content/DistributedMazeGame.Server",
+      "RelativePath": "assets/index-C3lPSvVT#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "1sd94obsay",
+      "Integrity": "/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\index-C3lPSvVT.js"
+    },
+    {
+      "Identity": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-DOtGIqZi.css",
+      "SourceId": "DistributedMazeGame.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\",
+      "BasePath": "_content/DistributedMazeGame.Server",
+      "RelativePath": "assets/index-DOtGIqZi#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "dv4viiqicx",
+      "Integrity": "aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\index-DOtGIqZi.css"
+    },
+    {
+      "Identity": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\index.html",
+      "SourceId": "DistributedMazeGame.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\",
+      "BasePath": "_content/DistributedMazeGame.Server",
+      "RelativePath": "index#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "pxkjgjec19",
+      "Integrity": "Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "assets/index-C3lPSvVT.1sd94obsay.js",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\1znliu1l8d-1sd94obsay.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000019615920"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "50978"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sZkOoTHkAV9GYmv+stKyewQcMAJdgWoUDaKyTdx+lbI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "1sd94obsay"
+        },
+        {
+          "Name": "label",
+          "Value": "assets/index-C3lPSvVT.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-C3lPSvVT.1sd94obsay.js",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-C3lPSvVT.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "157002"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "1sd94obsay"
+        },
+        {
+          "Name": "label",
+          "Value": "assets/index-C3lPSvVT.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-C3lPSvVT.1sd94obsay.js.gz",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\1znliu1l8d-1sd94obsay.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "50978"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sZkOoTHkAV9GYmv+stKyewQcMAJdgWoUDaKyTdx+lbI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "1sd94obsay"
+        },
+        {
+          "Name": "label",
+          "Value": "assets/index-C3lPSvVT.js.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-sZkOoTHkAV9GYmv+stKyewQcMAJdgWoUDaKyTdx+lbI="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-C3lPSvVT.js",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\1znliu1l8d-1sd94obsay.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000019615920"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "50978"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sZkOoTHkAV9GYmv+stKyewQcMAJdgWoUDaKyTdx+lbI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-C3lPSvVT.js",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-C3lPSvVT.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "157002"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-C3lPSvVT.js.gz",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\1znliu1l8d-1sd94obsay.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "50978"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sZkOoTHkAV9GYmv+stKyewQcMAJdgWoUDaKyTdx+lbI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-sZkOoTHkAV9GYmv+stKyewQcMAJdgWoUDaKyTdx+lbI="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-DOtGIqZi.css",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\f7s2s6q8ya-dv4viiqicx.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000329163924"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3037"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MDgu2jVgxVzMR6L+W7O5sSzJDv4D23auf8Z446QbF6I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-DOtGIqZi.css",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-DOtGIqZi.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "12384"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-DOtGIqZi.css.gz",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\f7s2s6q8ya-dv4viiqicx.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3037"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MDgu2jVgxVzMR6L+W7O5sSzJDv4D23auf8Z446QbF6I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-MDgu2jVgxVzMR6L+W7O5sSzJDv4D23auf8Z446QbF6I="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-DOtGIqZi.dv4viiqicx.css",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\f7s2s6q8ya-dv4viiqicx.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000329163924"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3037"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MDgu2jVgxVzMR6L+W7O5sSzJDv4D23auf8Z446QbF6I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "dv4viiqicx"
+        },
+        {
+          "Name": "label",
+          "Value": "assets/index-DOtGIqZi.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-DOtGIqZi.dv4viiqicx.css",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-DOtGIqZi.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "12384"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "dv4viiqicx"
+        },
+        {
+          "Name": "label",
+          "Value": "assets/index-DOtGIqZi.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA="
+        }
+      ]
+    },
+    {
+      "Route": "assets/index-DOtGIqZi.dv4viiqicx.css.gz",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\f7s2s6q8ya-dv4viiqicx.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3037"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MDgu2jVgxVzMR6L+W7O5sSzJDv4D23auf8Z446QbF6I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "dv4viiqicx"
+        },
+        {
+          "Name": "label",
+          "Value": "assets/index-DOtGIqZi.css.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-MDgu2jVgxVzMR6L+W7O5sSzJDv4D23auf8Z446QbF6I="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\lyvmysih1l-pxkjgjec19.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.003508771930"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "284"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DoAqjPayRhgzv2nTAtRj5xhnf5Iv24rhL19JH7RpcpM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "418"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM="
+        }
+      ]
+    },
+    {
+      "Route": "index.html.gz",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\lyvmysih1l-pxkjgjec19.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "284"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DoAqjPayRhgzv2nTAtRj5xhnf5Iv24rhL19JH7RpcpM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DoAqjPayRhgzv2nTAtRj5xhnf5Iv24rhL19JH7RpcpM="
+        }
+      ]
+    },
+    {
+      "Route": "index.pxkjgjec19.html",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\lyvmysih1l-pxkjgjec19.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.003508771930"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "284"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DoAqjPayRhgzv2nTAtRj5xhnf5Iv24rhL19JH7RpcpM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "pxkjgjec19"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM="
+        }
+      ]
+    },
+    {
+      "Route": "index.pxkjgjec19.html",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "418"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "pxkjgjec19"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM="
+        }
+      ]
+    },
+    {
+      "Route": "index.pxkjgjec19.html.gz",
+      "AssetFile": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\Debug\\net9.0\\compressed\\lyvmysih1l-pxkjgjec19.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "284"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DoAqjPayRhgzv2nTAtRj5xhnf5Iv24rhL19JH7RpcpM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 25 Dec 2025 10:42:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "pxkjgjec19"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DoAqjPayRhgzv2nTAtRj5xhnf5Iv24rhL19JH7RpcpM="
+        }
+      ]
+    }
+  ]
 }

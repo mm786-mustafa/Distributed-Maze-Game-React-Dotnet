@@ -48,6 +48,12 @@ var webSocketOptions = new WebSocketOptions
 };
 app.UseWebSockets(webSocketOptions);
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+// Serve index.html for unmatched routes (SPA)
+app.MapFallbackToFile("/index.html");
+
 app.MapControllers();
 
 // Route: /ws?sessionId=123 

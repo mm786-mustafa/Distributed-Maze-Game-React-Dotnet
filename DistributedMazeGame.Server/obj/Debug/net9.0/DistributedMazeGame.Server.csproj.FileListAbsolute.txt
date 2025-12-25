@@ -120,3 +120,7 @@ C:\Users\Mustafa\Desktop\Project\PDC-Project\DistributedMazeGame.Server\bin\Debu
 C:\Users\Mustafa\Desktop\Project\PDC-Project\DistributedMazeGame.Server\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\Mustafa\Desktop\Project\PDC-Project\DistributedMazeGame.Server\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\Mustafa\Desktop\Project\PDC-Project\DistributedMazeGame.Server\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+C:\Users\Mustafa\Desktop\Project\PDC-Project\DistributedMazeGame.Server\bin\Debug\net9.0\DistributedMazeGame.Server.staticwebassets.runtime.json
+C:\Users\Mustafa\Desktop\Project\PDC-Project\DistributedMazeGame.Server\obj\Debug\net9.0\compressed\1znliu1l8d-1sd94obsay.gz
+C:\Users\Mustafa\Desktop\Project\PDC-Project\DistributedMazeGame.Server\obj\Debug\net9.0\compressed\f7s2s6q8ya-dv4viiqicx.gz
+C:\Users\Mustafa\Desktop\Project\PDC-Project\DistributedMazeGame.Server\obj\Debug\net9.0\compressed\lyvmysih1l-pxkjgjec19.gz

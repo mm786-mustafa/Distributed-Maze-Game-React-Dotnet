@@ -1,0 +1,37 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-C3lPSvVT.js",
+      "PackagePath": "staticwebassets\\assets\\index-C3lPSvVT.js"
+    },
+    {
+      "Id": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\assets\\index-DOtGIqZi.css",
+      "PackagePath": "staticwebassets\\assets\\index-DOtGIqZi.css"
+    },
+    {
+      "Id": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.DistributedMazeGame.Server.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.DistributedMazeGame.Server.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.DistributedMazeGame.Server.props",
+      "PackagePath": "build\\DistributedMazeGame.Server.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.DistributedMazeGame.Server.props",
+      "PackagePath": "buildMultiTargeting\\DistributedMazeGame.Server.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.DistributedMazeGame.Server.props",
+      "PackagePath": "buildTransitive\\DistributedMazeGame.Server.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

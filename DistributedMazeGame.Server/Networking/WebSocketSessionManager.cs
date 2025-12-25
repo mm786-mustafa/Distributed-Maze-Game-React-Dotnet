@@ -1,4 +1,16 @@
+// =============================================================================
 // Networking/WebSocketSessionManager.cs
+// =============================================================================
+// WEBSOCKET SESSION MANAGEMENT - Real-Time Communication Layer
+// 
+// PDC CONCEPTS DEMONSTRATED:
+// 1. CONCURRENT CONNECTION HANDLING - Multiple clients per session
+// 2. EVENT-DRIVEN ARCHITECTURE - Async message processing
+// 3. BROADCAST PATTERN - Efficient multi-client state synchronization
+// 4. CONNECTION POOLING - Managing WebSocket lifecycle
+// 5. THREAD-SAFE COLLECTIONS - ConcurrentDictionary for session state
+// =============================================================================
+
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
@@ -7,11 +19,32 @@ using DistributedMazeGame.Server.Services;
 
 namespace DistributedMazeGame.Server.Networking
 {
-    public sealed record SessionInfo(string SessionId, int PlayerCount, bool Started, bool Ended);
+    /// <summary>
+    /// Provides information about an active game session.
+    /// Used by the diagnostics API.
+    /// </summary>
+    public sealed record SessionInfo(
+        string SessionId, 
+        int PlayerCount, 
+        bool Started, 
+        bool Ended,
+        string[] PlayerIds
+    );
 
+    /// <summary>
+    /// Manages all WebSocket game sessions.
+    /// 
+    /// PDC PATTERN: Session Manager / Connection Pool
+    /// - Handles multiple concurrent game sessions
+    /// - Routes messages to appropriate game logic
+    /// - Manages player connections and disconnections
+    /// </summary>
     public sealed class WebSocketSessionManager
     {
+        // Thread-safe dictionary of all active sessions
         private readonly ConcurrentDictionary<string, GameSession> _sessions = new();
+        
+        // Reference to the authoritative game service
         private readonly GameAuthoritativeService _authoritative;
 
         public WebSocketSessionManager(GameAuthoritativeService authoritative)
@@ -19,31 +52,75 @@ namespace DistributedMazeGame.Server.Networking
             _authoritative = authoritative;
         }
 
+        /// <summary>
+        /// Handle a new WebSocket client connection.
+        /// PDC PATTERN: Connection routing and session assignment
+        /// </summary>
         public async Task HandleClientAsync(string sessionId, WebSocket socket, CancellationToken ct)
         {
+            // GetOrAdd is atomic - ensures only one session per ID
             var session = _sessions.GetOrAdd(sessionId, id => new GameSession(id, _authoritative));
             await session.AddPlayerAsync(socket, ct);
         }
 
+        /// <summary>
+        /// Get a snapshot of all active sessions (for monitoring/debugging).
+        /// </summary>
         public IReadOnlyList<SessionInfo> GetSessionsSnapshot()
         {
             var list = new List<SessionInfo>();
             foreach (var kv in _sessions)
             {
                 var s = kv.Value;
-                list.Add(new SessionInfo(kv.Key, s.PlayerCount, s.Started, s.Ended));
+                list.Add(new SessionInfo(
+                    kv.Key, 
+                    s.PlayerCount, 
+                    s.Started, 
+                    s.Ended,
+                    s.GetPlayerIds()
+                ));
             }
             return list;
         }
+
+        /// <summary>
+        /// Get info about a specific session.
+        /// </summary>
+        public SessionInfo? GetSession(string sessionId)
+        {
+            if (!_sessions.TryGetValue(sessionId, out var s))
+                return null;
+            return new SessionInfo(sessionId, s.PlayerCount, s.Started, s.Ended, s.GetPlayerIds());
+        }
     }
 
+    /// <summary>
+    /// Represents a single game session with multiple players.
+    /// 
+    /// PDC CONCEPTS:
+    /// - WAITING ROOM PATTERN: Collect players before starting
+    /// - BROADCAST: Send state updates to all connected clients
+    /// - GRACEFUL DEGRADATION: Handle disconnections mid-game
+    /// </summary>
     internal sealed class GameSession
     {
+        // Configuration
+        private const int MIN_PLAYERS_TO_START = 2;  // Minimum players to start
+        private const int MAX_PLAYERS = 4;           // Maximum players allowed
+
         private readonly string _sessionId;
         private readonly GameAuthoritativeService _authoritative;
+        
+        // Lock for thread-safe state modifications
         private readonly object _lock = new();
 
-        private readonly List<PlayerConn> _players = new(2); // exactly two
+        // Connected players
+        private readonly List<PlayerConn> _players = new(MAX_PLAYERS);
+        
+        // Player ID counter (incremented atomically)
+        private int _nextPlayerId = 1;
+        
+        // Session state
         private bool _started;
         private bool _ended;
 
@@ -53,50 +130,106 @@ namespace DistributedMazeGame.Server.Networking
             _authoritative = authoritative;
         }
 
+        // Thread-safe property accessors
         public int PlayerCount { get { lock (_lock) { return _players.Count; } } }
         public bool Started { get { lock (_lock) { return _started; } } }
         public bool Ended { get { lock (_lock) { return _ended; } } }
+        
+        public string[] GetPlayerIds()
+        {
+            lock (_lock)
+            {
+                return _players.Select(p => p.PlayerId.ToString()).ToArray();
+            }
+        }
 
+        /// <summary>
+        /// Add a new player to the session.
+        /// Implements the WAITING ROOM pattern - game starts when enough players join.
+        /// </summary>
         public async Task AddPlayerAsync(WebSocket socket, CancellationToken ct)
         {
             PlayerConn? playerConn = null;
 
             lock (_lock)
             {
-                if (_players.Count >= 2)
+                // Reject if session is full or game has ended
+                if (_players.Count >= MAX_PLAYERS || _ended)
                 {
-                    // Reject extra connections
-                    // Send a short message then close
-                    _ = SendAsync(socket, new { type = "ERROR", message = "Session is full" }, ct);
-                    _ = socket.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Session full", ct);
+                    _ = SendAsync(socket, new { type = "ERROR", message = "Session is full or ended" }, ct);
+                    _ = socket.CloseAsync(WebSocketCloseStatus.PolicyViolation, "Session unavailable", ct);
                     return;
                 }
 
-                var playerId = (_players.Count == 0) ? 1 : 2;
+                // Assign unique player ID
+                var playerId = _nextPlayerId++;
                 playerConn = new PlayerConn(playerId, socket);
                 _players.Add(playerConn);
             }
 
-            // Confirm join
-            await SendAsync(socket, new { type = "ASSIGNED", playerId = playerConn!.PlayerId, sessionId = _sessionId }, ct);
+            // Send ASSIGNED message with player info and waiting status
+            var waitingCount = MIN_PLAYERS_TO_START - _players.Count;
+            await SendAsync(socket, new 
+            { 
+                type = "ASSIGNED", 
+                playerId = playerConn!.PlayerId, 
+                sessionId = _sessionId,
+                waitingFor = Math.Max(0, waitingCount),
+                totalPlayers = _players.Count
+            }, ct);
 
-            // Start session when both connected
-            if (_players.Count == 2 && !_started)
-            {
-                lock (_lock) { _started = true; }
+            // Notify other players about new joiner
+            await BroadcastAsync(new 
+            { 
+                type = "PLAYER_JOINED", 
+                payload = new 
+                { 
+                    playerId = playerConn.PlayerId,
+                    totalPlayers = _players.Count,
+                    waitingFor = Math.Max(0, waitingCount)
+                }
+            }, ct, excludePlayer: playerConn.PlayerId);
 
-                // Initialize authoritative game state for this session (opposite ends, place flag)
-                await _authoritative.InitializeAsync(_sessionId, _players[0].PlayerId, _players[1].PlayerId, ct);
-
-                // Broadcast INIT state
-                var initPayload = await _authoritative.GetStateAsync(_sessionId, ct);
-                await BroadcastAsync(new { type = "INIT", payload = initPayload }, ct);
-            }
+            // Check if we should start the game
+            await TryStartGameAsync(ct);
 
             // Begin receive loop for this player
             await ReceiveLoopAsync(playerConn!, ct);
         }
 
+        /// <summary>
+        /// Start the game if minimum players have joined.
+        /// </summary>
+        private async Task TryStartGameAsync(CancellationToken ct)
+        {
+            bool shouldStart = false;
+            int[] playerIds;
+
+            lock (_lock)
+            {
+                if (_started || _players.Count < MIN_PLAYERS_TO_START)
+                    return;
+                
+                _started = true;
+                shouldStart = true;
+                playerIds = _players.Select(p => p.PlayerId).ToArray();
+            }
+
+            if (shouldStart)
+            {
+                // Initialize authoritative game state
+                await _authoritative.InitializeAsync(_sessionId, playerIds, ct);
+
+                // Broadcast INIT with full game state including maze
+                var initPayload = await _authoritative.GetStateAsync(_sessionId, ct);
+                await BroadcastAsync(new { type = "INIT", payload = initPayload }, ct);
+            }
+        }
+
+        /// <summary>
+        /// Main message receiving loop for a player.
+        /// PDC PATTERN: Event-driven message processing
+        /// </summary>
         private async Task ReceiveLoopAsync(PlayerConn player, CancellationToken ct)
         {
             var buffer = new byte[4096];
@@ -114,16 +247,15 @@ namespace DistributedMazeGame.Server.Networking
             }
             catch (OperationCanceledException)
             {
-                // graceful shutdown
+                // Graceful shutdown
             }
             catch (WebSocketException)
             {
-                // network error; treat as disconnect
+                // Network error; treat as disconnect
             }
             catch (Exception ex)
             {
-                // unexpected error, log in real app
-                await SendSafe(player.Socket, new { type = "ERROR", message = "Internal error" }, ct);
+                Console.WriteLine($"[WS] Error in receive loop: {ex.Message}");
             }
             finally
             {
@@ -131,6 +263,10 @@ namespace DistributedMazeGame.Server.Networking
             }
         }
 
+        /// <summary>
+        /// Process incoming WebSocket message.
+        /// Maps client input to authoritative game actions.
+        /// </summary>
         private async Task HandleMessageAsync(int playerId, string raw, CancellationToken ct)
         {
             try
@@ -138,15 +274,16 @@ namespace DistributedMazeGame.Server.Networking
                 using var doc = JsonDocument.Parse(raw);
                 var type = doc.RootElement.GetProperty("type").GetString();
 
-                if (type == "JOIN")
+                // Handle pre-game messages
+                if (type == "READY")
                 {
-                    // Already handled on connect; ignore duplicates
+                    // Player signals ready - could extend to require all players ready
                     return;
                 }
 
                 if (!_started || _ended) return;
 
-                // Map MOVE_* to direction
+                // Map MOVE_* to direction strings
                 string? dir = type switch
                 {
                     "MOVE_UP" => "UP",
@@ -155,82 +292,148 @@ namespace DistributedMazeGame.Server.Networking
                     "MOVE_RIGHT" => "RIGHT",
                     _ => null
                 };
+                
                 if (dir is null) return;
 
+                // Apply move through authoritative service
                 var result = await _authoritative.ApplyMoveAsync(_sessionId, playerId, dir, ct);
 
-                // Broadcast state or rejection
+                // Handle rejected moves
                 if (result.Status == "Rejected")
                 {
-                    var reject = new { type = "REJECT", payload = new { playerId, direction = dir } };
-                    await BroadcastAsync(reject, ct);
+                    // Only notify the player who made the rejected move
+                    var rejectingPlayer = _players.FirstOrDefault(p => p.PlayerId == playerId);
+                    if (rejectingPlayer != null)
+                    {
+                        await SendSafe(rejectingPlayer.Socket, new 
+                        { 
+                            type = "REJECT", 
+                            payload = new { playerId, direction = dir } 
+                        }, ct);
+                    }
                     return;
                 }
 
+                // If flag was captured, broadcast capture event
+                if (result.CapturedBy.HasValue)
+                {
+                    await BroadcastAsync(new 
+                    { 
+                        type = "FLAG_CAPTURED", 
+                        payload = new 
+                        { 
+                            capturedBy = result.CapturedBy.Value,
+                            newFlag = result.NewFlag.HasValue 
+                                ? new { x = result.NewFlag.Value.x, y = result.NewFlag.Value.y } 
+                                : null
+                        }
+                    }, ct);
+                }
+
+                // Broadcast updated state to all players
                 var state = await _authoritative.GetStateAsync(_sessionId, ct);
                 await BroadcastAsync(new { type = "STATE", payload = state }, ct);
 
-                // End game if completed
+                // Handle game completion
                 if (result.Completed && !_ended)
                 {
                     lock (_lock) { _ended = true; }
-                    var endPayload = new { sessionId = _sessionId, winnerPlayerId = result.WinnerPlayerId };
-                    await BroadcastAsync(new { type = "END", payload = endPayload }, ct);
+                    
+                    // Get final leaderboard
+                    var leaderboard = await _authoritative.GetLeaderboardAsync(_sessionId);
+                    
+                    await BroadcastAsync(new 
+                    { 
+                        type = "GAME_OVER", 
+                        payload = leaderboard 
+                    }, ct);
 
-                    // Close both sockets gracefully
-                    foreach (var p in _players.ToArray())
+                    // Close sockets gracefully after a delay (let clients process)
+                    _ = Task.Run(async () =>
                     {
-                        await CloseSafe(p.Socket, WebSocketCloseStatus.NormalClosure, "Game ended", ct);
-                    }
+                        await Task.Delay(5000, ct); // 5 second delay
+                        foreach (var p in _players.ToArray())
+                        {
+                            await CloseSafe(p.Socket, WebSocketCloseStatus.NormalClosure, "Game ended", ct);
+                        }
+                    }, ct);
                 }
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
-                // malformed message; ignore or notify
+                Console.WriteLine($"[WS] JSON parse error: {ex.Message}");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // prevent crash; optionally notify clients
+                Console.WriteLine($"[WS] Message handling error: {ex.Message}");
             }
         }
 
+        /// <summary>
+        /// Handle player disconnection.
+        /// PDC PATTERN: Graceful degradation under partial failures
+        /// </summary>
         private async Task HandleDisconnectAsync(PlayerConn player, CancellationToken ct)
         {
-            // Remove player
             lock (_lock)
             {
                 _players.RemoveAll(p => p.PlayerId == player.PlayerId);
             }
 
-            // Notify other player
-            await BroadcastAsync(new { type = "DISCONNECT", payload = new { playerId = player.PlayerId } }, ct);
+            // Notify remaining players
+            await BroadcastAsync(new 
+            { 
+                type = "PLAYER_LEFT", 
+                payload = new 
+                { 
+                    playerId = player.PlayerId,
+                    remainingPlayers = _players.Count
+                }
+            }, ct);
 
-            // End session if any player leaves mid-game
-            if (_started && !_ended)
+            // If game was in progress and not enough players remain, end it
+            if (_started && !_ended && _players.Count < 1)
             {
                 lock (_lock) { _ended = true; }
-                await BroadcastAsync(new { type = "END", payload = new { sessionId = _sessionId, reason = "PlayerDisconnected" } }, ct);
-                foreach (var p in _players.ToArray())
-                {
-                    await CloseSafe(p.Socket, WebSocketCloseStatus.NormalClosure, "Session terminated", ct);
-                }
+                
+                var leaderboard = await _authoritative.GetLeaderboardAsync(_sessionId);
+                await BroadcastAsync(new 
+                { 
+                    type = "GAME_OVER", 
+                    payload = new 
+                    { 
+                        reason = "AllPlayersLeft",
+                        leaderboard
+                    }
+                }, ct);
             }
         }
 
-        private async Task BroadcastAsync(object message, CancellationToken ct)
+        /// <summary>
+        /// Broadcast a message to all connected players.
+        /// PDC PATTERN: Parallel fan-out for efficient multi-client updates
+        /// </summary>
+        private async Task BroadcastAsync(object message, CancellationToken ct, int? excludePlayer = null)
         {
             var json = JsonSerializer.Serialize(message);
             var bytes = Encoding.UTF8.GetBytes(json);
 
-            var targets = Array.Empty<PlayerConn>();
+            PlayerConn[] targets;
             lock (_lock)
             {
-                targets = _players.ToArray();
+                targets = excludePlayer.HasValue
+                    ? _players.Where(p => p.PlayerId != excludePlayer.Value).ToArray()
+                    : _players.ToArray();
             }
 
+            // Send to all targets in parallel
             var tasks = targets.Select(p => SendSafe(p.Socket, bytes, ct));
             await Task.WhenAll(tasks);
         }
+
+        // =========================================================================
+        // HELPER METHODS
+        // =========================================================================
 
         private static Task SendAsync(WebSocket socket, object message, CancellationToken ct)
         {
@@ -242,20 +445,24 @@ namespace DistributedMazeGame.Server.Networking
         private static async Task SendSafe(WebSocket socket, object message, CancellationToken ct)
         {
             try { await SendAsync(socket, message, ct); }
-            catch { /* ignore send errors */ }
+            catch { /* Ignore send errors */ }
         }
 
         private static async Task SendSafe(WebSocket socket, byte[] bytes, CancellationToken ct)
         {
             try { await socket.SendAsync(bytes, WebSocketMessageType.Text, true, ct); }
-            catch { /* ignore send errors */ }
+            catch { /* Ignore send errors */ }
         }
 
         private static async Task CloseSafe(WebSocket socket, WebSocketCloseStatus status, string desc, CancellationToken ct)
         {
-            try { await socket.CloseAsync(status, desc, ct); } catch { /* ignore */ }
+            try { await socket.CloseAsync(status, desc, ct); }
+            catch { /* Ignore close errors */ }
         }
 
+        /// <summary>
+        /// Player connection record.
+        /// </summary>
         private sealed record PlayerConn(int PlayerId, WebSocket Socket);
     }
 }
