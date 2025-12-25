@@ -22,6 +22,48 @@ namespace DistributedMazeGame.Server.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("DistributedMazeGame.Server.Data.Entities.DailyWin", b =>
+                {
+                    b.Property<int>("DailyWinId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("DailyWinId"));
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<int>("GamesPlayed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalFlagsCaptured")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("WinCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("DailyWinId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("Date", "WinCount");
+
+                    b.HasIndex("PlayerId", "Date")
+                        .IsUnique();
+
+                    b.ToTable("DailyWins");
+                });
+
             modelBuilder.Entity("DistributedMazeGame.Server.Data.Entities.GameSession", b =>
                 {
                     b.Property<int>("SessionId")
@@ -33,6 +75,9 @@ namespace DistributedMazeGame.Server.Migrations
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("PlayerCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime(6)");
 
@@ -40,6 +85,9 @@ namespace DistributedMazeGame.Server.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
+
+                    b.Property<int>("TotalFlagsCaptured")
+                        .HasColumnType("int");
 
                     b.HasKey("SessionId");
 
@@ -104,6 +152,50 @@ namespace DistributedMazeGame.Server.Migrations
                     b.ToTable("Players");
                 });
 
+            modelBuilder.Entity("DistributedMazeGame.Server.Data.Entities.PlayerScore", b =>
+                {
+                    b.Property<int>("PlayerScoreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PlayerScoreId"));
+
+                    b.Property<int>("FinalRank")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FlagsCaptured")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsWinner")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PlayerName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("RecordedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlayerScoreId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("RecordedAt");
+
+                    b.HasIndex("SessionId");
+
+                    b.HasIndex("IsWinner", "RecordedAt");
+
+                    b.ToTable("PlayerScores");
+                });
+
             modelBuilder.Entity("DistributedMazeGame.Server.Data.Entities.Result", b =>
                 {
                     b.Property<int>("ResultId")
@@ -131,6 +223,17 @@ namespace DistributedMazeGame.Server.Migrations
                     b.ToTable("Results");
                 });
 
+            modelBuilder.Entity("DistributedMazeGame.Server.Data.Entities.DailyWin", b =>
+                {
+                    b.HasOne("DistributedMazeGame.Server.Data.Entities.Player", "Player")
+                        .WithMany("DailyWins")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Player");
+                });
+
             modelBuilder.Entity("DistributedMazeGame.Server.Data.Entities.Move", b =>
                 {
                     b.HasOne("DistributedMazeGame.Server.Data.Entities.Player", "Player")
@@ -141,6 +244,25 @@ namespace DistributedMazeGame.Server.Migrations
 
                     b.HasOne("DistributedMazeGame.Server.Data.Entities.GameSession", "Session")
                         .WithMany("Moves")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Player");
+
+                    b.Navigation("Session");
+                });
+
+            modelBuilder.Entity("DistributedMazeGame.Server.Data.Entities.PlayerScore", b =>
+                {
+                    b.HasOne("DistributedMazeGame.Server.Data.Entities.Player", "Player")
+                        .WithMany("PlayerScores")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DistributedMazeGame.Server.Data.Entities.GameSession", "Session")
+                        .WithMany("PlayerScores")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -173,12 +295,18 @@ namespace DistributedMazeGame.Server.Migrations
                 {
                     b.Navigation("Moves");
 
+                    b.Navigation("PlayerScores");
+
                     b.Navigation("Result");
                 });
 
             modelBuilder.Entity("DistributedMazeGame.Server.Data.Entities.Player", b =>
                 {
+                    b.Navigation("DailyWins");
+
                     b.Navigation("Moves");
+
+                    b.Navigation("PlayerScores");
 
                     b.Navigation("Results");
                 });

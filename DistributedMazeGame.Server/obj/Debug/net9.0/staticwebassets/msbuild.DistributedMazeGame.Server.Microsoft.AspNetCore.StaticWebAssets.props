@@ -1,40 +1,40 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-C3lPSvVT.js'))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-B900445K.css'))">
       <SourceType>Package</SourceType>
       <SourceId>DistributedMazeGame.Server</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/DistributedMazeGame.Server</BasePath>
-      <RelativePath>assets/index-C3lPSvVT.js</RelativePath>
+      <RelativePath>assets/index-B900445K.css</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>1sd94obsay</Fingerprint>
-      <Integrity>/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA=</Integrity>
+      <Fingerprint>40wxmtz7sn</Fingerprint>
+      <Integrity>vIVk/K+sqkXi9MfHCAx613m8WVpkil4gSYMRpsxegqk=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-C3lPSvVT.js'))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-B900445K.css'))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-DOtGIqZi.css'))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-Btd8fz4C.js'))">
       <SourceType>Package</SourceType>
       <SourceId>DistributedMazeGame.Server</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/DistributedMazeGame.Server</BasePath>
-      <RelativePath>assets/index-DOtGIqZi.css</RelativePath>
+      <RelativePath>assets/index-Btd8fz4C.js</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>dv4viiqicx</Fingerprint>
-      <Integrity>aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA=</Integrity>
+      <Fingerprint>74lp2z4isn</Fingerprint>
+      <Integrity>2VqBj7YSRSiEL2Xiykv9qagA0SUho9fQoBgUj3lsIY0=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-DOtGIqZi.css'))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-Btd8fz4C.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))">
       <SourceType>Package</SourceType>
@@ -48,8 +48,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>pxkjgjec19</Fingerprint>
-      <Integrity>Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM=</Integrity>
+      <Fingerprint>rmvg60q23l</Fingerprint>
+      <Integrity>I+oAqeG4IYMDXl11+lcrTsi/WxbMiGfsdSm1q6YKsyc=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</OriginalItemSpec>

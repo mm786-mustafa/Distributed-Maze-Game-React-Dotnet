@@ -1,40 +1,40 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/assets/index-C3lPSvVT.1sd94obsay.js">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-C3lPSvVT.js'))</AssetFile>
+    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/assets/index-B900445K.40wxmtz7sn.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-B900445K.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"1sd94obsay"},{"Name":"integrity","Value":"sha256-/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA="},{"Name":"label","Value":"_content/DistributedMazeGame.Server/assets/index-C3lPSvVT.js"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"157002"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 10:42:11 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"40wxmtz7sn"},{"Name":"integrity","Value":"sha256-vIVk/K\u002BsqkXi9MfHCAx613m8WVpkil4gSYMRpsxegqk="},{"Name":"label","Value":"_content/DistributedMazeGame.Server/assets/index-B900445K.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"16427"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022vIVk/K\u002BsqkXi9MfHCAx613m8WVpkil4gSYMRpsxegqk=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 18:16:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/assets/index-C3lPSvVT.js">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-C3lPSvVT.js'))</AssetFile>
+    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/assets/index-B900445K.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-B900445K.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"157002"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022/71cTMjZdv3WHSt7gmEoxF4reKyps0OCqD1rqsW7FLA=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 10:42:11 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-vIVk/K\u002BsqkXi9MfHCAx613m8WVpkil4gSYMRpsxegqk="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"16427"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022vIVk/K\u002BsqkXi9MfHCAx613m8WVpkil4gSYMRpsxegqk=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 18:16:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/assets/index-DOtGIqZi.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-DOtGIqZi.css'))</AssetFile>
+    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/assets/index-Btd8fz4C.74lp2z4isn.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-Btd8fz4C.js'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"12384"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 10:42:11 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"74lp2z4isn"},{"Name":"integrity","Value":"sha256-2VqBj7YSRSiEL2Xiykv9qagA0SUho9fQoBgUj3lsIY0="},{"Name":"label","Value":"_content/DistributedMazeGame.Server/assets/index-Btd8fz4C.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"161889"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u00222VqBj7YSRSiEL2Xiykv9qagA0SUho9fQoBgUj3lsIY0=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 18:16:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/assets/index-DOtGIqZi.dv4viiqicx.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-DOtGIqZi.css'))</AssetFile>
+    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/assets/index-Btd8fz4C.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\index-Btd8fz4C.js'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"dv4viiqicx"},{"Name":"integrity","Value":"sha256-aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA="},{"Name":"label","Value":"_content/DistributedMazeGame.Server/assets/index-DOtGIqZi.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"12384"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022aSRL6Q5BlRJZ2MM6dhkTTA93QaBNVxIr7Uo23broElA=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 10:42:11 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-2VqBj7YSRSiEL2Xiykv9qagA0SUho9fQoBgUj3lsIY0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"161889"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u00222VqBj7YSRSiEL2Xiykv9qagA0SUho9fQoBgUj3lsIY0=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 18:16:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/index.html">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"418"},{"Name":"Content-Type","Value":"text/html"},{"Name":"ETag","Value":"\u0022Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 10:42:11 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-I\u002BoAqeG4IYMDXl11\u002BlcrTsi/WxbMiGfsdSm1q6YKsyc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"418"},{"Name":"Content-Type","Value":"text/html"},{"Name":"ETag","Value":"\u0022I\u002BoAqeG4IYMDXl11\u002BlcrTsi/WxbMiGfsdSm1q6YKsyc=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 18:16:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/index.pxkjgjec19.html">
+    <StaticWebAssetEndpoint Include="_content/DistributedMazeGame.Server/index.rmvg60q23l.html">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"pxkjgjec19"},{"Name":"integrity","Value":"sha256-Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM="},{"Name":"label","Value":"_content/DistributedMazeGame.Server/index.html"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"418"},{"Name":"Content-Type","Value":"text/html"},{"Name":"ETag","Value":"\u0022Q/Nq77l1lse2RK6CfUd3SUv78emDsN2fdcjdF40R4pM=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 10:42:11 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"rmvg60q23l"},{"Name":"integrity","Value":"sha256-I\u002BoAqeG4IYMDXl11\u002BlcrTsi/WxbMiGfsdSm1q6YKsyc="},{"Name":"label","Value":"_content/DistributedMazeGame.Server/index.html"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"418"},{"Name":"Content-Type","Value":"text/html"},{"Name":"ETag","Value":"\u0022I\u002BoAqeG4IYMDXl11\u002BlcrTsi/WxbMiGfsdSm1q6YKsyc=\u0022"},{"Name":"Last-Modified","Value":"Thu, 25 Dec 2025 18:16:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DistributedMazeGame.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class mazegame : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +24,9 @@ namespace DistributedMazeGame.Server.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Status = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TotalFlagsCaptured = table.Column<int>(type: "int", nullable: false),
+                    PlayerCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,6 +47,31 @@ namespace DistributedMazeGame.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Players", x => x.PlayerId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "DailyWins",
+                columns: table => new
+                {
+                    DailyWinId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
+                    WinCount = table.Column<int>(type: "int", nullable: false),
+                    TotalFlagsCaptured = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    GamesPlayed = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    LastUpdated = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DailyWins", x => x.DailyWinId);
+                    table.ForeignKey(
+                        name: "FK_DailyWins_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
+                        principalColumn: "PlayerId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -71,6 +98,39 @@ namespace DistributedMazeGame.Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Moves_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
+                        principalColumn: "PlayerId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PlayerScores",
+                columns: table => new
+                {
+                    PlayerScoreId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SessionId = table.Column<int>(type: "int", nullable: false),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    PlayerName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FlagsCaptured = table.Column<int>(type: "int", nullable: false),
+                    IsWinner = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    FinalRank = table.Column<int>(type: "int", nullable: false),
+                    RecordedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerScores", x => x.PlayerScoreId);
+                    table.ForeignKey(
+                        name: "FK_PlayerScores_GameSessions_SessionId",
+                        column: x => x.SessionId,
+                        principalTable: "GameSessions",
+                        principalColumn: "SessionId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerScores_Players_PlayerId",
                         column: x => x.PlayerId,
                         principalTable: "Players",
                         principalColumn: "PlayerId",
@@ -107,6 +167,22 @@ namespace DistributedMazeGame.Server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DailyWins_Date_WinCount",
+                table: "DailyWins",
+                columns: new[] { "Date", "WinCount" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DailyWins_PlayerId",
+                table: "DailyWins",
+                column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DailyWins_PlayerId_Date",
+                table: "DailyWins",
+                columns: new[] { "PlayerId", "Date" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GameSessions_StartTime",
                 table: "GameSessions",
                 column: "StartTime");
@@ -132,6 +208,26 @@ namespace DistributedMazeGame.Server.Migrations
                 column: "Name");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PlayerScores_IsWinner_RecordedAt",
+                table: "PlayerScores",
+                columns: new[] { "IsWinner", "RecordedAt" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerScores_PlayerId",
+                table: "PlayerScores",
+                column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerScores_RecordedAt",
+                table: "PlayerScores",
+                column: "RecordedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerScores_SessionId",
+                table: "PlayerScores",
+                column: "SessionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Results_SessionId",
                 table: "Results",
                 column: "SessionId",
@@ -147,7 +243,13 @@ namespace DistributedMazeGame.Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "DailyWins");
+
+            migrationBuilder.DropTable(
                 name: "Moves");
+
+            migrationBuilder.DropTable(
+                name: "PlayerScores");
 
             migrationBuilder.DropTable(
                 name: "Results");

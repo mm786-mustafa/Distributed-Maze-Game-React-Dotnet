@@ -9,6 +9,7 @@
 // 3. CONCURRENT DATA STRUCTURES - ConcurrentDictionary for thread-safe state
 // 4. DISTRIBUTED STATE SYNCHRONIZATION - All clients receive same authoritative state
 // 5. ASYNCHRONOUS PERSISTENCE - Non-blocking database writes via Task.Run
+// 6. DAILY LEADERBOARD - Pre-aggregated statistics for efficient querying
 // =============================================================================
 
 using System.Collections.Concurrent;
@@ -29,7 +30,7 @@ namespace DistributedMazeGame.Server.Services
     public sealed class GameAuthoritativeService
     {
         // Game configuration constants
-        private const int TOTAL_FLAGS = 10;        // Total flags to capture before game ends
+        private const int TOTAL_FLAGS = 4;        // Total flags to capture before game ends
         private const int MAZE_SIZE = 21;          // Grid dimension (odd for proper maze generation)
         private const int MAX_PLAYERS = 4;         // Support up to 4 players
 
@@ -43,6 +44,7 @@ namespace DistributedMazeGame.Server.Services
             public (int x, int y) Flag;                                       // Current flag position
             public ConcurrentDictionary<int, (int x, int y)> Positions = new(); // Player positions (thread-safe)
             public ConcurrentDictionary<int, int> Scores = new();             // Player scores (thread-safe)
+            public ConcurrentDictionary<int, string> PlayerNames = new();     // Player names (thread-safe)
             public int FlagsCaptured;                                         // Number of flags captured so far
             public bool Completed;                                            // Game ended flag
             public int DbSessionId;                                           // Database session ID for persistence
@@ -70,10 +72,65 @@ namespace DistributedMazeGame.Server.Services
         }
 
         /// <summary>
+        /// Set or update a player's display name.
+        /// Thread-safe operation using ConcurrentDictionary.
+        /// Also persists the name to the database.
+        /// </summary>
+        public async Task SetPlayerNameAsync(string sessionId, int playerId, string name)
+        {
+            if (_states.TryGetValue(sessionId, out var s))
+            {
+                s.PlayerNames[playerId] = name;
+                
+                // Also update in database
+                try
+                {
+                    await using var db = await _dbFactory.CreateDbContextAsync(CancellationToken.None);
+                    var player = await db.Players.FirstOrDefaultAsync(p => p.PlayerId == playerId, CancellationToken.None);
+                    if (player != null)
+                    {
+                        player.Name = name;
+                        await db.SaveChangesAsync(CancellationToken.None);
+                        Console.WriteLine($"[DB] Updated player {playerId} name to '{name}'");
+                    }
+                    else
+                    {
+                        // Player doesn't exist yet, create them
+                        await db.Players.AddAsync(new Player
+                        {
+                            PlayerId = playerId,
+                            Name = name,
+                            ConnectedAt = DateTime.UtcNow
+                        }, CancellationToken.None);
+                        await db.SaveChangesAsync(CancellationToken.None);
+                        Console.WriteLine($"[DB] Created player {playerId} with name '{name}'");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[DB] Error updating player name: {ex.Message}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get a player's display name.
+        /// </summary>
+        public string GetPlayerName(string sessionId, int playerId)
+        {
+            if (_states.TryGetValue(sessionId, out var s) && 
+                s.PlayerNames.TryGetValue(playerId, out var name))
+            {
+                return name;
+            }
+            return $"Player {playerId}";
+        }
+
+        /// <summary>
         /// Initialize a new game session with the given players.
         /// PDC PATTERN: Session initialization with distributed state setup
         /// </summary>
-        public async Task InitializeAsync(string sessionId, int[] playerIds, CancellationToken ct)
+        public async Task InitializeAsync(string sessionId, int[] playerIds, Dictionary<int, string>? playerNames, CancellationToken ct)
         {
             var s = _states.GetOrAdd(sessionId, _ => new State());
             var n = MAZE_SIZE;
@@ -94,8 +151,13 @@ namespace DistributedMazeGame.Server.Services
             var spawnPoints = new[] { (0, 0), (n - 1, n - 1), (0, n - 1), (n - 1, 0) };
             for (int i = 0; i < playerIds.Length && i < MAX_PLAYERS; i++)
             {
-                s.Positions[playerIds[i]] = spawnPoints[i];
-                s.Scores[playerIds[i]] = 0;
+                var pid = playerIds[i];
+                s.Positions[pid] = spawnPoints[i];
+                s.Scores[pid] = 0;
+                
+                // Set player name (from provided names or default)
+                var name = playerNames?.GetValueOrDefault(pid) ?? $"Player {pid}";
+                s.PlayerNames[pid] = name;
             }
 
             // Spawn initial flag at a random walkable position
@@ -104,43 +166,47 @@ namespace DistributedMazeGame.Server.Services
             s.Completed = false;
             s.StartTime = DateTime.UtcNow;
 
-            // ASYNC PERSISTENCE: Non-blocking database write
-            // PDC PATTERN: Fire-and-forget for non-critical operations
-            _ = Task.Run(async () =>
+            // SYNCHRONOUS PERSISTENCE: Ensure session exists before gameplay
+            // Guarantees s.DbSessionId is set for subsequent persistence
+            try
             {
-                try
+                await using var db = await _dbFactory.CreateDbContextAsync(CancellationToken.None);
+                var session = new GameSession
                 {
-                    await using var db = await _dbFactory.CreateDbContextAsync(ct);
-                    var session = new GameSession
-                    {
-                        StartTime = DateTime.UtcNow,
-                        Status = "Active"
-                    };
-                    await db.GameSessions.AddAsync(session, ct);
-                    await db.SaveChangesAsync(ct);
-                    s.DbSessionId = session.SessionId;
+                    StartTime = DateTime.UtcNow,
+                    Status = "Active",
+                    PlayerCount = playerIds.Length
+                };
+                await db.GameSessions.AddAsync(session, CancellationToken.None);
+                await db.SaveChangesAsync(CancellationToken.None);
+                s.DbSessionId = session.SessionId;
 
-                    // Ensure all player records exist (for foreign key constraints)
-                    foreach (var pid in playerIds)
-                    {
-                        var exists = await db.Players.AnyAsync(x => x.PlayerId == pid, ct);
-                        if (!exists)
-                        {
-                            await db.Players.AddAsync(new Player
-                            {
-                                PlayerId = pid,
-                                Name = $"Player {pid}",
-                                ConnectedAt = DateTime.UtcNow
-                            }, ct);
-                        }
-                    }
-                    await db.SaveChangesAsync(ct);
-                }
-                catch (Exception ex)
+                // Ensure all player records exist (for foreign key constraints)
+                foreach (var pid in playerIds)
                 {
-                    Console.WriteLine($"[DB] Init persistence error: {ex.Message}");
+                    var playerName = s.PlayerNames.GetValueOrDefault(pid, $"Player {pid}");
+                    var existingPlayer = await db.Players.FirstOrDefaultAsync(x => x.PlayerId == pid, CancellationToken.None);
+                    if (existingPlayer == null)
+                    {
+                        await db.Players.AddAsync(new Player
+                        {
+                            PlayerId = pid,
+                            Name = playerName,
+                            ConnectedAt = DateTime.UtcNow
+                        }, CancellationToken.None);
+                    }
+                    else
+                    {
+                        // Update name if changed
+                        existingPlayer.Name = playerName;
+                    }
                 }
-            }, ct);
+                await db.SaveChangesAsync(CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[DB] Init persistence error: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -152,20 +218,27 @@ namespace DistributedMazeGame.Server.Services
             if (!_states.TryGetValue(sessionId, out var s))
                 return Task.FromResult<object>(new { error = "Session not found" });
 
-            // Build player array with positions and scores
+            // Build player array with positions, scores, and names
             var players = s.Positions.Select(kv => new 
             { 
                 id = kv.Key, 
                 x = kv.Value.x, 
                 y = kv.Value.y,
-                score = s.Scores.GetValueOrDefault(kv.Key, 0)
+                score = s.Scores.GetValueOrDefault(kv.Key, 0),
+                name = s.PlayerNames.GetValueOrDefault(kv.Key, $"Player {kv.Key}")
             }).ToArray();
 
             // Build leaderboard (sorted by score descending)
             var leaderboard = s.Scores
                 .OrderByDescending(kv => kv.Value)
                 .ThenBy(kv => kv.Key)
-                .Select((kv, rank) => new { rank = rank + 1, playerId = kv.Key, score = kv.Value })
+                .Select((kv, rank) => new 
+                { 
+                    rank = rank + 1, 
+                    playerId = kv.Key, 
+                    score = kv.Value,
+                    name = s.PlayerNames.GetValueOrDefault(kv.Key, $"Player {kv.Key}")
+                })
                 .ToArray();
 
             var payload = new
@@ -309,7 +382,8 @@ namespace DistributedMazeGame.Server.Services
             // If game completed, persist final results
             if (gameCompleted)
             {
-                _ = Task.Run(async () => await PersistGameResultsAsync(s, ct), ct);
+                // Use a non-cancelable token to ensure persistence completes even if the WebSocket request ends
+                _ = Task.Run(async () => await PersistGameResultsAsync(s, CancellationToken.None), CancellationToken.None);
             }
 
             return new GameMoveResult("Accepted", gameCompleted, capturedBy, newFlagPos);
@@ -331,6 +405,7 @@ namespace DistributedMazeGame.Server.Services
                     rank = rank + 1, 
                     playerId = kv.Key, 
                     score = kv.Value,
+                    name = s.PlayerNames.GetValueOrDefault(kv.Key, $"Player {kv.Key}"),
                     isWinner = rank == 0
                 })
                 .ToArray();
@@ -346,10 +421,50 @@ namespace DistributedMazeGame.Server.Services
                 completed = s.Completed,
                 leaderboard,
                 winnerId = winner?.playerId,
+                winnerName = winner?.name,
                 winnerScore = winner?.score,
                 totalFlags = TOTAL_FLAGS,
                 duration
             });
+        }
+
+        /// <summary>
+        /// Get today's top winners (daily leaderboard).
+        /// PDC PATTERN: Pre-aggregated query for efficient distributed access
+        /// </summary>
+        public async Task<object> GetDailyLeaderboardAsync(CancellationToken ct)
+        {
+            try
+            {
+                await using var db = await _dbFactory.CreateDbContextAsync(ct);
+                var today = DateOnly.FromDateTime(DateTime.UtcNow);
+                
+                var dailyLeaderboard = await db.DailyWins
+                    .Where(d => d.Date == today)
+                    .OrderByDescending(d => d.WinCount)
+                    .ThenByDescending(d => d.TotalFlagsCaptured)
+                    .Take(10)
+                    .Select(d => new
+                    {
+                        playerId = d.PlayerId,
+                        playerName = d.Player.Name,
+                        wins = d.WinCount,
+                        totalFlags = d.TotalFlagsCaptured,
+                        gamesPlayed = d.GamesPlayed
+                    })
+                    .ToListAsync(ct);
+
+                return new
+                {
+                    date = today.ToString("yyyy-MM-dd"),
+                    leaderboard = dailyLeaderboard
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[DB] Daily leaderboard error: {ex.Message}");
+                return new { date = DateOnly.FromDateTime(DateTime.UtcNow).ToString("yyyy-MM-dd"), leaderboard = Array.Empty<object>() };
+            }
         }
 
         /// <summary>
@@ -382,33 +497,160 @@ namespace DistributedMazeGame.Server.Services
 
         /// <summary>
         /// Persist final game results to database.
+        /// PDC PATTERN: Atomic transaction for distributed data consistency
+        /// 
+        /// This method:
+        /// 1. Updates the game session status
+        /// 2. Saves individual player scores (PlayerScore table)
+        /// 3. Updates the daily win aggregates (DailyWin table)
+        /// 4. Creates the result record with winner info
         /// </summary>
         private async Task PersistGameResultsAsync(State s, CancellationToken ct)
         {
-            if (s.DbSessionId <= 0) return;
+            Console.WriteLine($"[DB] PersistGameResultsAsync started for session {s.DbSessionId}");
+            
+            if (s.DbSessionId <= 0)
+            {
+                Console.WriteLine($"[DB] PersistGameResultsAsync aborted: DbSessionId is {s.DbSessionId}");
+                return;
+            }
+            
             try
             {
                 await using var db = await _dbFactory.CreateDbContextAsync(ct);
-                var session = await db.GameSessions.FirstOrDefaultAsync(x => x.SessionId == s.DbSessionId, ct);
-                if (session == null) return;
-
-                session.EndTime = DateTime.UtcNow;
-                session.Status = "Completed";
-
-                // Get winner (highest score)
-                var winner = s.Scores.OrderByDescending(kv => kv.Value).FirstOrDefault();
                 
-                await db.Results.AddAsync(new Result
+                // Use execution strategy to handle retries with transactions
+                // This is required when using MySqlRetryingExecutionStrategy
+                var strategy = db.Database.CreateExecutionStrategy();
+                
+                await strategy.ExecuteAsync(async () =>
                 {
-                    SessionId = session.SessionId,
-                    WinnerPlayerId = winner.Key,
-                    Duration = (int)(session.EndTime.GetValueOrDefault() - session.StartTime).TotalSeconds
-                }, ct);
-                await db.SaveChangesAsync(ct);
+                    // Use a transaction to ensure atomicity
+                    // PDC CONCEPT: ACID transaction for distributed consistency
+                    await using var transaction = await db.Database.BeginTransactionAsync(ct);
+                    
+                    try
+                    {
+                        var session = await db.GameSessions.FirstOrDefaultAsync(x => x.SessionId == s.DbSessionId, ct);
+                        if (session == null)
+                        {
+                            Console.WriteLine($"[DB] PersistGameResultsAsync aborted: Session {s.DbSessionId} not found");
+                            return;
+                        }
+
+                        var endTime = DateTime.UtcNow;
+                        session.EndTime = endTime;
+                        session.Status = "Completed";
+                        session.TotalFlagsCaptured = s.FlagsCaptured;
+                        
+                        Console.WriteLine($"[DB] Updating session {s.DbSessionId} to Completed");
+
+                        // Get sorted scores to determine rankings
+                        var sortedScores = s.Scores
+                            .OrderByDescending(kv => kv.Value)
+                            .ThenBy(kv => kv.Key)
+                            .ToList();
+                            
+                        Console.WriteLine($"[DB] Processing {sortedScores.Count} player scores");
+
+                        var highestScore = sortedScores.FirstOrDefault().Value;
+                        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+                        // Save each player's score
+                        int rank = 0;
+                        foreach (var (playerId, score) in sortedScores)
+                        {
+                            rank++;
+                            var isWinner = score == highestScore && rank == 1;
+                            var playerName = s.PlayerNames.GetValueOrDefault(playerId, $"Player {playerId}");
+                            
+                            Console.WriteLine($"[DB] Processing player {playerId} ({playerName}): score={score}, rank={rank}, isWinner={isWinner}");
+
+                            // Update player name in Players table
+                            var playerEntity = await db.Players.FirstOrDefaultAsync(p => p.PlayerId == playerId, ct);
+                            if (playerEntity != null)
+                            {
+                                playerEntity.Name = playerName;
+                                Console.WriteLine($"[DB] Updated player {playerId} name to '{playerName}'");
+                            }
+
+                            // Create PlayerScore record
+                            var playerScore = new PlayerScore
+                            {
+                                SessionId = s.DbSessionId,
+                                PlayerId = playerId,
+                                PlayerName = playerName,
+                                FlagsCaptured = score,
+                                IsWinner = isWinner,
+                                FinalRank = rank,
+                                RecordedAt = endTime
+                            };
+                            await db.PlayerScores.AddAsync(playerScore, ct);
+                            Console.WriteLine($"[DB] Added PlayerScore for player {playerId}");
+
+                            // Update daily win aggregate
+                            // PDC PATTERN: Upsert with atomic increment
+                            var dailyWin = await db.DailyWins
+                                .FirstOrDefaultAsync(d => d.PlayerId == playerId && d.Date == today, ct);
+
+                            if (dailyWin == null)
+                            {
+                                dailyWin = new DailyWin
+                                {
+                                    PlayerId = playerId,
+                                    Date = today,
+                                    WinCount = isWinner ? 1 : 0,
+                                    TotalFlagsCaptured = score,
+                                    GamesPlayed = 1,
+                                    LastUpdated = DateTime.UtcNow
+                                };
+                                await db.DailyWins.AddAsync(dailyWin, ct);
+                                Console.WriteLine($"[DB] Created DailyWin for player {playerId} on {today}");
+                            }
+                            else
+                            {
+                                if (isWinner) dailyWin.WinCount++;
+                                dailyWin.TotalFlagsCaptured += score;
+                                dailyWin.GamesPlayed++;
+                                dailyWin.LastUpdated = DateTime.UtcNow;
+                                Console.WriteLine($"[DB] Updated DailyWin for player {playerId}: wins={dailyWin.WinCount}, flags={dailyWin.TotalFlagsCaptured}, games={dailyWin.GamesPlayed}");
+                            }
+                        }
+
+                        // Get winner for Result table
+                        var winner = sortedScores.FirstOrDefault();
+                        var winnerName = s.PlayerNames.GetValueOrDefault(winner.Key, $"Player {winner.Key}");
+                        
+                        var result = new Result
+                        {
+                            SessionId = session.SessionId,
+                            WinnerPlayerId = winner.Key,
+                            Duration = (int)(session.EndTime.GetValueOrDefault() - session.StartTime).TotalSeconds
+                        };
+                        await db.Results.AddAsync(result, ct);
+                        Console.WriteLine($"[DB] Added Result: Winner={winnerName} (Player {winner.Key}), Duration={result.Duration}s");
+
+                        await db.SaveChangesAsync(ct);
+                        Console.WriteLine($"[DB] SaveChangesAsync completed");
+                        
+                        await transaction.CommitAsync(ct);
+                        Console.WriteLine($"[DB] Transaction committed successfully");
+                        
+                        Console.WriteLine($"[DB] Game {s.DbSessionId} results persisted successfully. Winner: {winnerName} (Player {winner.Key})");
+                    }
+                    catch (Exception innerEx)
+                    {
+                        Console.WriteLine($"[DB] Transaction error: {innerEx.Message}");
+                        Console.WriteLine($"[DB] Stack trace: {innerEx.StackTrace}");
+                        await transaction.RollbackAsync(ct);
+                        throw;
+                    }
+                });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[DB] Result persistence error: {ex.Message}");
+                Console.WriteLine($"[DB] Full exception: {ex}");
             }
         }
 

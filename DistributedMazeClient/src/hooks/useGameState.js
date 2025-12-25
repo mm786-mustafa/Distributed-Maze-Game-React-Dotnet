@@ -7,6 +7,7 @@
 // 1. CLIENT-SIDE STATE SYNCHRONIZATION - Mirrors authoritative server state
 // 2. EVENT-DRIVEN UPDATES - Reacts to server broadcasts
 // 3. OPTIMISTIC UI - Shows local changes while awaiting server confirmation
+// 4. DAILY LEADERBOARD - Displays today's top winners
 // =============================================================================
 
 import { useState, useEffect, useCallback } from "react";
@@ -31,10 +32,14 @@ export default function useGameState(sessionId) {
   const [flagsCaptured, setFlagsCaptured] = useState(0);
   const [totalFlags, setTotalFlags] = useState(10);
   
+  // Daily leaderboard (today's top winners)
+  const [dailyLeaderboard, setDailyLeaderboard] = useState([]);
+  
   // Game flow state
   const [gameStatus, setGameStatus] = useState("connecting"); // connecting, waiting, playing, ended
   const [waitingFor, setWaitingFor] = useState(0);
   const [winner, setWinner] = useState(null);
+  const [winnerName, setWinnerName] = useState(null);
   const [gameOverData, setGameOverData] = useState(null);
   
   // Flag capture notification
@@ -79,6 +84,18 @@ export default function useGameState(sessionId) {
     };
 
     /**
+     * NAME_CHANGED: A player changed their name
+     */
+    const onNameChanged = (payload) => {
+      setPlayers(prev => prev.map(p => 
+        p.id === payload.playerId ? { ...p, name: payload.name } : p
+      ));
+      setLeaderboard(prev => prev.map(entry =>
+        entry.playerId === payload.playerId ? { ...entry, name: payload.name } : entry
+      ));
+    };
+
+    /**
      * INIT: Game started - receive initial state with maze and positions
      */
     const onInit = (payload) => {
@@ -89,6 +106,15 @@ export default function useGameState(sessionId) {
       setFlagsCaptured(payload.flagsCaptured || 0);
       setTotalFlags(payload.totalFlags || 10);
       setGameStatus("playing");
+    };
+
+    /**
+     * DAILY_LEADERBOARD: Received daily leaderboard data
+     */
+    const onDailyLeaderboard = (payload) => {
+      if (payload?.leaderboard) {
+        setDailyLeaderboard(payload.leaderboard);
+      }
     };
 
     /**
@@ -107,6 +133,7 @@ export default function useGameState(sessionId) {
     const onFlagCaptured = (payload) => {
       setLastCapture({
         playerId: payload.capturedBy,
+        playerName: payload.capturedByName || `Player ${payload.capturedBy}`,
         timestamp: Date.now()
       });
       
@@ -128,6 +155,7 @@ export default function useGameState(sessionId) {
       
       if (payload.winnerId != null) {
         setWinner(payload.winnerId);
+        setWinnerName(payload.winnerName || `Player ${payload.winnerId}`);
       }
       
       if (payload.leaderboard) {
@@ -146,7 +174,9 @@ export default function useGameState(sessionId) {
     websocketService.subscribe("ASSIGNED", onAssigned);
     websocketService.subscribe("PLAYER_JOINED", onPlayerJoined);
     websocketService.subscribe("PLAYER_LEFT", onPlayerLeft);
+    websocketService.subscribe("NAME_CHANGED", onNameChanged);
     websocketService.subscribe("INIT", onInit);
+    websocketService.subscribe("DAILY_LEADERBOARD", onDailyLeaderboard);
     websocketService.subscribe("STATE", onState);
     websocketService.subscribe("FLAG_CAPTURED", onFlagCaptured);
     websocketService.subscribe("GAME_OVER", onGameOver);
@@ -157,7 +187,9 @@ export default function useGameState(sessionId) {
       websocketService.unsubscribe("ASSIGNED", onAssigned);
       websocketService.unsubscribe("PLAYER_JOINED", onPlayerJoined);
       websocketService.unsubscribe("PLAYER_LEFT", onPlayerLeft);
+      websocketService.unsubscribe("NAME_CHANGED", onNameChanged);
       websocketService.unsubscribe("INIT", onInit);
+      websocketService.unsubscribe("DAILY_LEADERBOARD", onDailyLeaderboard);
       websocketService.unsubscribe("STATE", onState);
       websocketService.unsubscribe("FLAG_CAPTURED", onFlagCaptured);
       websocketService.unsubscribe("GAME_OVER", onGameOver);
@@ -169,6 +201,11 @@ export default function useGameState(sessionId) {
    * Get current player's score
    */
   const myScore = players.find(p => p.id === playerId)?.score ?? 0;
+
+  /**
+   * Get current player's name
+   */
+  const myName = players.find(p => p.id === playerId)?.name ?? `Player ${playerId}`;
 
   /**
    * Check if current player is winning
@@ -187,12 +224,17 @@ export default function useGameState(sessionId) {
     flagsCaptured,
     totalFlags,
     myScore,
+    myName,
     isWinning,
+    
+    // Daily leaderboard
+    dailyLeaderboard,
     
     // Game flow
     gameStatus,
     waitingFor,
     winner,
+    winnerName,
     gameOverData,
     
     // Notifications

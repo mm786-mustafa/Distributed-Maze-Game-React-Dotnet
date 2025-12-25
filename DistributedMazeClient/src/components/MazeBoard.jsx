@@ -3,12 +3,17 @@
 // =============================================================================
 // 3D MAZE RENDERER - React Component
 // 
+// PDC CONCEPTS DEMONSTRATED:
+// 1. CLIENT-SIDE RENDERING - Visualizes server-authoritative state
+// 2. REAL-TIME UPDATES - Reflects state changes immediately
+// 
 // Renders the game maze with:
 // - 3D isometric perspective using CSS transforms
 // - Support for up to 4 players with distinct colors
 // - Real maze walls from server data
 // - Animated flag and player markers
 // - Score display on players
+// - Player names on hover
 // =============================================================================
 
 import React, { useMemo, useState } from "react";
@@ -30,7 +35,7 @@ const PLAYER_COLORS = {
  * Renders the game maze with players and flag.
  * Uses CSS 3D transforms for isometric view.
  * 
- * @param {Array} players - Array of player objects {id, x, y, score}
+ * @param {Array} players - Array of player objects {id, x, y, score, name}
  * @param {Object} flag - Flag position {x, y}
  * @param {Array} maze - 2D array of maze cells (1=path, 0=wall)
  * @param {number} currentPlayerId - The ID of the current player (for highlighting)
@@ -77,7 +82,7 @@ export default function MazeBoard({
       {/* Capture notification */}
       {lastCapture && (
         <div className="capture-notification">
-          🚩 Player {lastCapture.playerId} captured the flag!
+          🚩 {lastCapture.playerName || `Player ${lastCapture.playerId}`} captured the flag!
         </div>
       )}
       
@@ -115,9 +120,11 @@ export default function MazeBoard({
                           ? `translate(${-50 + idx * 8}%, -50%) translateZ(20px)` 
                           : undefined
                       }}
-                      title={`Player ${player.id} - Score: ${player.score || 0}`}
+                      title={`${player.name || `Player ${player.id}`} - Score: ${player.score || 0}`}
                     >
-                      <span className="player-label">P{player.id}</span>
+                      <span className="player-label">
+                        {player.name ? player.name.charAt(0).toUpperCase() : `P${player.id}`}
+                      </span>
                       {player.score > 0 && (
                         <span className="player-score">{player.score}</span>
                       )}
@@ -147,7 +154,7 @@ export default function MazeBoard({
           <div key={p.id} className="legend-item">
             <div className={`legend-color player-${p.id}`} />
             <span>
-              P{p.id} {p.id === currentPlayerId ? '(You)' : ''}: {p.score || 0} pts
+              {p.name || `P${p.id}`} {p.id === currentPlayerId ? '(You)' : ''}: {p.score || 0} pts
             </span>
           </div>
         ))}

@@ -3,14 +3,22 @@
 // =============================================================================
 // LOBBY / HOME PAGE - Room creation and joining
 // 
+// PDC CONCEPTS DEMONSTRATED:
+// 1. REST API INTEGRATION - Fetches daily leaderboard from server
+// 2. PLAYER IDENTITY - Allows players to set display names
+// 
 // Features:
 // - Create a new room with auto-generated ID
 // - Join existing room by ID
+// - Set player display name
+// - View today's top winners
 // - Instructions for distributed play
 // =============================================================================
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import GamePage from "./GamePage";
+import websocketService from "../services/websocketService";
+import config from "../config";
 import "./HomePage.css";
 
 /**
@@ -32,30 +40,73 @@ function generateRoomId() {
  */
 export default function HomePage() {
   const [sessionId, setSessionId] = useState("");
+  const [playerName, setPlayerName] = useState(() => {
+    // Restore player name from localStorage if available
+    return localStorage.getItem('playerName') || '';
+  });
   const [joined, setJoined] = useState(false);
   const [error, setError] = useState("");
+  const [dailyLeaderboard, setDailyLeaderboard] = useState([]);
+  const [loadingLeaderboard, setLoadingLeaderboard] = useState(true);
+
+  /**
+   * Fetch daily leaderboard on component mount
+   */
+  useEffect(() => {
+    const fetchDailyLeaderboard = async () => {
+      try {
+        const baseUrl = config.apiUrl || '';
+        const response = await fetch(`${baseUrl}/api/leaderboard/daily`);
+        if (response.ok) {
+          const data = await response.json();
+          setDailyLeaderboard(data.leaderboard || []);
+        }
+      } catch (err) {
+        console.log('Could not fetch daily leaderboard:', err.message);
+      } finally {
+        setLoadingLeaderboard(false);
+      }
+    };
+    fetchDailyLeaderboard();
+  }, []);
 
   /**
    * Create a new room with random ID
    */
   const handleCreate = useCallback(() => {
+    if (!playerName.trim()) {
+      setError("Please enter your name");
+      return;
+    }
+    // Save player name to localStorage and websocket service
+    localStorage.setItem('playerName', playerName.trim());
+    websocketService.setPlayerName(playerName.trim());
+    
     const newId = generateRoomId();
     setSessionId(newId);
     setJoined(true);
     setError("");
-  }, []);
+  }, [playerName]);
 
   /**
    * Join an existing room
    */
   const handleJoin = useCallback(() => {
+    if (!playerName.trim()) {
+      setError("Please enter your name");
+      return;
+    }
     if (!sessionId.trim()) {
       setError("Please enter a Room ID");
       return;
     }
+    // Save player name to localStorage and websocket service
+    localStorage.setItem('playerName', playerName.trim());
+    websocketService.setPlayerName(playerName.trim());
+    
     setJoined(true);
     setError("");
-  }, [sessionId]);
+  }, [sessionId, playerName]);
 
   /**
    * Leave the current room
@@ -78,7 +129,7 @@ export default function HomePage() {
 
   // Show game page if joined
   if (joined) {
-    return <GamePage sessionId={sessionId} onLeave={handleLeave} />;
+    return <GamePage sessionId={sessionId} playerName={playerName} onLeave={handleLeave} />;
   }
 
   // Show home/lobby page
@@ -90,6 +141,20 @@ export default function HomePage() {
           <h1>🎮 Maze Capture</h1>
           <p className="subtitle">A Distributed Multiplayer Game</p>
         </header>
+
+        {/* Player Name Input */}
+        <div className="name-input-section">
+          <label htmlFor="playerName">Your Name:</label>
+          <input
+            id="playerName"
+            type="text"
+            placeholder="Enter your name"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            maxLength={20}
+            className="name-input"
+          />
+        </div>
 
         {/* Main actions */}
         <div className="action-cards">
@@ -124,6 +189,37 @@ export default function HomePage() {
             {error && <p className="error-msg">{error}</p>}
           </div>
         </div>
+
+        {/* Daily Leaderboard */}
+        <section className="daily-leaderboard-section">
+          <h3>🏆 Today's Top Winners</h3>
+          {loadingLeaderboard ? (
+            <p className="loading-text">Loading leaderboard...</p>
+          ) : dailyLeaderboard.length > 0 ? (
+            <div className="daily-leaderboard-table">
+              <div className="leaderboard-header">
+                <span className="col-rank">Rank</span>
+                <span className="col-name">Player</span>
+                <span className="col-wins">Wins</span>
+                <span className="col-flags">Flags</span>
+                <span className="col-games">Games</span>
+              </div>
+              {dailyLeaderboard.map((entry, idx) => (
+                <div key={entry.playerId} className="leaderboard-row">
+                  <span className="col-rank">
+                    {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`}
+                  </span>
+                  <span className="col-name">{entry.playerName}</span>
+                  <span className="col-wins">{entry.wins}</span>
+                  <span className="col-flags">{entry.totalFlags}</span>
+                  <span className="col-games">{entry.gamesPlayed}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="no-data-text">No winners yet today. Be the first!</p>
+          )}
+        </section>
 
         {/* Game Info */}
         <section className="game-info">

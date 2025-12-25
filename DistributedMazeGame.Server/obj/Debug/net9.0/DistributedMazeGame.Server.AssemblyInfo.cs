@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DistributedMazeGame.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+363793cb48de1fa70ab953d735caca757c0ba71d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f6658715cf9d2feb9b826b215aba3cd06df5818")]
 [assembly: System.Reflection.AssemblyProductAttribute("DistributedMazeGame.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DistributedMazeGame.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

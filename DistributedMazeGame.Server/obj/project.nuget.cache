@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jhyKdqjt1Q4=",
+  "dgSpecHash": "FKeTc70kYy0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj",
+  "projectFilePath": "C:\\Users\\Mustafa\\Desktop\\PDC-Project\\Distributed-Maze-Game-React-Dotnet\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Mustafa\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Mustafa\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.4\\microsoft.aspnetcore.openapi.9.0.4.nupkg.sha512",

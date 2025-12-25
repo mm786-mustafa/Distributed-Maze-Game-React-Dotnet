@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj": {}
+    "C:\\Users\\Mustafa\\Desktop\\PDC-Project\\Distributed-Maze-Game-React-Dotnet\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj": {
+    "C:\\Users\\Mustafa\\Desktop\\PDC-Project\\Distributed-Maze-Game-React-Dotnet\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj",
+        "projectUniqueName": "C:\\Users\\Mustafa\\Desktop\\PDC-Project\\Distributed-Maze-Game-React-Dotnet\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj",
         "projectName": "DistributedMazeGame.Server",
-        "projectPath": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj",
+        "projectPath": "C:\\Users\\Mustafa\\Desktop\\PDC-Project\\Distributed-Maze-Game-React-Dotnet\\DistributedMazeGame.Server\\DistributedMazeGame.Server.csproj",
         "packagesPath": "C:\\Users\\Mustafa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mustafa\\Desktop\\Project\\PDC-Project\\DistributedMazeGame.Server\\obj\\",
+        "outputPath": "C:\\Users\\Mustafa\\Desktop\\PDC-Project\\Distributed-Maze-Game-React-Dotnet\\DistributedMazeGame.Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Mustafa\\AppData\\Roaming\\NuGet\\NuGet.Config"

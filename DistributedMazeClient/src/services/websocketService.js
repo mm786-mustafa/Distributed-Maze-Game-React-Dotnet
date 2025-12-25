@@ -1,4 +1,13 @@
 // services/WebSocketService.js
+// =============================================================================
+// WEBSOCKET CLIENT SERVICE - Real-time communication with game server
+// 
+// PDC CONCEPTS DEMONSTRATED:
+// 1. EVENT-DRIVEN ARCHITECTURE - Pub/sub pattern for message handling
+// 2. RECONNECTION LOGIC - Fault tolerance for distributed systems
+// 3. STATE SYNCHRONIZATION - Client mirrors authoritative server state
+// =============================================================================
+
 import config from "../config";
 
 class WebSocketService {
@@ -6,6 +15,7 @@ class WebSocketService {
     this.socket = null;
     this.sessionId = null;
     this.playerId = null;
+    this.playerName = null;
     this.reconnectInterval = 3000; // 3 seconds
     this.shouldReconnect = true;
     this.listeners = new Map(); // type -> Set(callback)
@@ -34,18 +44,29 @@ class WebSocketService {
 
     this.socket.onopen = () => {
       // Connected; server will assign player via ASSIGNED
-      // Optionally send a join message if protocol required
-      // this.send("JOIN", { sessionId: this.sessionId });
+      // If we have a stored player name, send it after connection
+      if (this.playerName) {
+        this.setPlayerName(this.playerName);
+      }
     };
 
     this.socket.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-        const { type, payload } = msg;
+        const { type, payload, dailyLeaderboard } = msg;
 
         // Special handling: assignment
         if (type === "ASSIGNED" && payload && payload.playerId != null) {
           this.playerId = payload.playerId;
+          // Send stored name if we have one
+          if (this.playerName) {
+            this.setPlayerName(this.playerName);
+          }
+        }
+
+        // Include dailyLeaderboard in payload if present
+        if (dailyLeaderboard) {
+          this.#emit("DAILY_LEADERBOARD", dailyLeaderboard);
         }
 
         this.#emit(type, payload ?? msg);
@@ -70,6 +91,20 @@ class WebSocketService {
     if (this.socket) {
       try { this.socket.close(); } catch {}
       this.socket = null;
+    }
+  }
+
+  /**
+   * Set the player's display name.
+   * This should be called before or after joining a session.
+   */
+  setPlayerName(name) {
+    this.playerName = name;
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify({
+        type: "SET_NAME",
+        name: name
+      }));
     }
   }
 

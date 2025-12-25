@@ -144,6 +144,17 @@ namespace DistributedMazeGame.Server.Networking
         }
 
         /// <summary>
+        /// Get the dictionary of player IDs to names.
+        /// </summary>
+        private Dictionary<int, string> GetPlayerNames()
+        {
+            lock (_lock)
+            {
+                return _players.ToDictionary(p => p.PlayerId, p => p.Name);
+            }
+        }
+
+        /// <summary>
         /// Add a new player to the session.
         /// Implements the WAITING ROOM pattern - game starts when enough players join.
         /// </summary>
@@ -161,9 +172,9 @@ namespace DistributedMazeGame.Server.Networking
                     return;
                 }
 
-                // Assign unique player ID
+                // Assign unique player ID with default name
                 var playerId = _nextPlayerId++;
-                playerConn = new PlayerConn(playerId, socket);
+                playerConn = new PlayerConn(playerId, socket, $"Player {playerId}");
                 _players.Add(playerConn);
             }
 
@@ -185,6 +196,7 @@ namespace DistributedMazeGame.Server.Networking
                 payload = new 
                 { 
                     playerId = playerConn.PlayerId,
+                    playerName = playerConn.Name,
                     totalPlayers = _players.Count,
                     waitingFor = Math.Max(0, waitingCount)
                 }
@@ -204,6 +216,7 @@ namespace DistributedMazeGame.Server.Networking
         {
             bool shouldStart = false;
             int[] playerIds;
+            Dictionary<int, string> playerNames;
 
             lock (_lock)
             {
@@ -213,16 +226,25 @@ namespace DistributedMazeGame.Server.Networking
                 _started = true;
                 shouldStart = true;
                 playerIds = _players.Select(p => p.PlayerId).ToArray();
+                playerNames = _players.ToDictionary(p => p.PlayerId, p => p.Name);
             }
 
             if (shouldStart)
             {
-                // Initialize authoritative game state
-                await _authoritative.InitializeAsync(_sessionId, playerIds, ct);
+                // Initialize authoritative game state with player names
+                await _authoritative.InitializeAsync(_sessionId, playerIds, playerNames, ct);
+
+                // Get daily leaderboard to include in INIT
+                var dailyLeaderboard = await _authoritative.GetDailyLeaderboardAsync(ct);
 
                 // Broadcast INIT with full game state including maze
                 var initPayload = await _authoritative.GetStateAsync(_sessionId, ct);
-                await BroadcastAsync(new { type = "INIT", payload = initPayload }, ct);
+                await BroadcastAsync(new 
+                { 
+                    type = "INIT", 
+                    payload = initPayload,
+                    dailyLeaderboard 
+                }, ct);
             }
         }
 
@@ -281,6 +303,41 @@ namespace DistributedMazeGame.Server.Networking
                     return;
                 }
 
+                // Handle SET_NAME message - allows player to set their display name
+                if (type == "SET_NAME")
+                {
+                    if (doc.RootElement.TryGetProperty("name", out var nameElement))
+                    {
+                        var name = nameElement.GetString();
+                        if (!string.IsNullOrWhiteSpace(name))
+                        {
+                            // Sanitize name (max 20 chars, no special chars)
+                            name = new string(name.Take(20).Where(c => char.IsLetterOrDigit(c) || c == ' ' || c == '_').ToArray()).Trim();
+                            if (!string.IsNullOrEmpty(name))
+                            {
+                                lock (_lock)
+                                {
+                                    var player = _players.FirstOrDefault(p => p.PlayerId == playerId);
+                                    if (player != null)
+                                    {
+                                        player.Name = name;
+                                    }
+                                }
+                                // Update name in authoritative service AND database
+                                await _authoritative.SetPlayerNameAsync(_sessionId, playerId, name);
+                                
+                                // Broadcast name change to all players
+                                await BroadcastAsync(new 
+                                { 
+                                    type = "NAME_CHANGED", 
+                                    payload = new { playerId, name }
+                                }, ct);
+                            }
+                        }
+                    }
+                    return;
+                }
+
                 if (!_started || _ended) return;
 
                 // Map MOVE_* to direction strings
@@ -314,15 +371,17 @@ namespace DistributedMazeGame.Server.Networking
                     return;
                 }
 
-                // If flag was captured, broadcast capture event
+                // If flag was captured, broadcast capture event with player name
                 if (result.CapturedBy.HasValue)
                 {
+                    var capturerName = _authoritative.GetPlayerName(_sessionId, result.CapturedBy.Value);
                     await BroadcastAsync(new 
                     { 
                         type = "FLAG_CAPTURED", 
                         payload = new 
                         { 
                             capturedBy = result.CapturedBy.Value,
+                            capturedByName = capturerName,
                             newFlag = result.NewFlag.HasValue 
                                 ? new { x = result.NewFlag.Value.x, y = result.NewFlag.Value.y } 
                                 : null
@@ -339,13 +398,15 @@ namespace DistributedMazeGame.Server.Networking
                 {
                     lock (_lock) { _ended = true; }
                     
-                    // Get final leaderboard
+                    // Get final leaderboard and daily leaderboard
                     var leaderboard = await _authoritative.GetLeaderboardAsync(_sessionId);
+                    var dailyLeaderboard = await _authoritative.GetDailyLeaderboardAsync(ct);
                     
                     await BroadcastAsync(new 
                     { 
                         type = "GAME_OVER", 
-                        payload = leaderboard 
+                        payload = leaderboard,
+                        dailyLeaderboard
                     }, ct);
 
                     // Close sockets gracefully after a delay (let clients process)
@@ -461,8 +522,20 @@ namespace DistributedMazeGame.Server.Networking
         }
 
         /// <summary>
-        /// Player connection record.
+        /// Player connection record with mutable name.
         /// </summary>
-        private sealed record PlayerConn(int PlayerId, WebSocket Socket);
+        private sealed class PlayerConn
+        {
+            public int PlayerId { get; }
+            public WebSocket Socket { get; }
+            public string Name { get; set; }
+            
+            public PlayerConn(int playerId, WebSocket socket, string name)
+            {
+                PlayerId = playerId;
+                Socket = socket;
+                Name = name;
+            }
+        }
     }
 }

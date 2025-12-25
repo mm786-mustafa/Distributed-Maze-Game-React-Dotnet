@@ -385,6 +385,188 @@
   color: #bdc3c7;
 }
 
+/* =========================================================================
+ * DAILY LEADERBOARD STYLES
+ * ========================================================================= */
+
+/* Daily Leaderboard Card in Waiting Room */
+.daily-leaders-card {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  min-width: 300px;
+}
+
+.daily-leaders-card h3 {
+  margin: 0 0 1rem 0;
+  color: #ffd700;
+  font-size: 1.1rem;
+}
+
+.daily-leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.daily-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.daily-rank {
+  font-size: 1.2rem;
+  min-width: 30px;
+  text-align: center;
+}
+
+.daily-name {
+  flex: 1;
+  text-align: left;
+  font-weight: 500;
+}
+
+.daily-wins {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* Daily Results section on Game Over */
+.daily-results {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  min-width: 400px;
+}
+
+.daily-results h2 {
+  margin: 0 0 1rem 0;
+  color: #ffd700;
+  font-size: 1.2rem;
+}
+
+.leaderboard.daily .leaderboard-entry {
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.4rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.leaderboard.daily .score small {
+  color: #95a5a6;
+  font-weight: normal;
+  margin-left: 0.25rem;
+}
+
+/* Winner Announcement */
+.winner-announcement {
+  margin-bottom: 1.5rem;
+}
+
+.winner-text {
+  font-size: 1.3rem;
+  color: #ffd700;
+}
+
+.winner-text strong {
+  font-size: 1.5rem;
+}
+
+/* Mini Daily Leaderboard in Game Sidebar */
+.daily-mini {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.daily-mini h4 {
+  margin: 0 0 0.75rem 0;
+  color: #ffd700;
+  font-size: 0.9rem;
+}
+
+.daily-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.daily-mini-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.5rem;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 4px;
+}
+
+.mini-rank {
+  font-size: 0.9rem;
+}
+
+.mini-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-wins {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+/* Player Legend in Controls Sidebar */
+.player-legend {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.player-legend h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+}
+
+.legend-player {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  font-size: 0.85rem;
+}
+
+.player-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.player-dot.color-1 { background: #e74c3c; }
+.player-dot.color-2 { background: #3498db; }
+.player-dot.color-3 { background: #27ae60; }
+.player-dot.color-4 { background: #f39c12; }
+
+.legend-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Responsive adjustments */
 @media (max-width: 900px) {
   .game-content {
@@ -400,5 +582,17 @@
   
   .scoreboard h3, .controls-info h3 {
     width: 100%;
+  }
+
+  .daily-results, .final-results {
+    min-width: auto;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .daily-leaders-card {
+    min-width: auto;
+    width: 100%;
+    max-width: 300px;
   }
 }
